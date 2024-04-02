@@ -155,17 +155,35 @@ summary(df$modo_envio)
 mapeamento = c('Navio' = 0, 'Aviao' = 1, 'Caminhao' = 2)
 
 # Aplicando a codificação de rótulos manualmente usando recode
-df$prioridade_produto <- recode(df$modo_envio, !!!mapeamento)
+df$modo_envio <- recode(df$modo_envio, !!!mapeamento)
 table(df$modo_envio)
 
 
 
 ## Método 2
 
+# -> Variável categórica 'genero' (foi interpretado como uma variável categórica nominal)
+summary(df$genero)
+
+# Usando a função factor para converter a variável categórica em fatores (Label Encoding)
+df <- df %>%
+  mutate(genero = as.numeric(factor(genero)) - 1)
+
+table(df$genero)
+
+str(df)
+
+
+
 
 
 
 #### One-Hot Encoding
+
+# -> Variável categórica 'corredor_armazem' (foi interpretado como uma variável categórica nominal)
+
+
+
 
 
 
