@@ -30,9 +30,13 @@ library(randomForest)
 
 # - Este Estudo de Caso é uma continuação do trabalho iniciado no capítulo anterior.
 
-# - Agora aplicaremos Pré Processamento.
+# - O objetivo do Pré Processamento dos Dados é colocar tudo que for texto na sua representação numérica correspondente.
+#   E além disso, precisamos garantir que os dados estejam na mesma escala.
 
-# - Todo  o  Estudo  de  Caso  é  no  contexto  de  um  problema  de  negócio  em  E-Commerce Analytics.
+# - Portanto agora aplicaremos técnicas de pré-processamento de variáveis categóricas (Label Encoding e One-HotEncoding) e Feature Scaling de variáveis
+#   numéricas (Normalização e Padronização).
+
+# - O objetivo é pré-processar os dados paraumaetapa de modelagem preditiva. 
 
 
 
@@ -109,7 +113,7 @@ analise_inicial <- function(dataframe_recebido) {  # para encotrar linhas com ca
 analise_inicial(df)
 
 
-## Modificando todas as variáveis do tipo chr para factor e removendo coluna X
+## Modificando todas as variáveis do tipo chr para factor e removendo coluna de "índice" chamado X
 df <- dplyr::mutate_if(df, is.character, as.factor)
 df <- df %>% select(-X)
 str(df)
@@ -117,7 +121,60 @@ str(df)
 
 
 
-#### Label Encoding ####
 
-## Método 1
+############      Pré-Processamento de Variáveis Categóricas (Label Encoding e One-HotEncoding)     ############
+
+
+#### Label Encoding
+
+# - Label Encoding (codificação de rótulos) é uma técnica de codificação para lidar com variáveis categóricas.
+#   Nesta técnica, a cada rótulo é atribuído um número inteiro exclusivo com base na ordem alfabética.
+
+# - Isso pode ser feito de maneira manual (usando dicionários) ou com o algoritmo .
+# - Veremos os dois métodos na sequência.
+
+
+
+## Método 1 (manual)
+
+# -> Variável categórica 'prioridade_produto' (foi interpretado como uma variável categórica ordinal)
+summary(df$prioridade_produto)
+
+# Criando um Dicionário para Mapeamento (seguindo ordem alfabética)
+mapeamento = c('alta' = 0, 'baixa' = 1, 'media' = 2)
+
+# Aplicando a codificação de rótulos manualmente usando recode
+df$prioridade_produto <- recode(df$prioridade_produto, !!!mapeamento)
+table(df$prioridade_produto)
+
+
+# -> Variável categórica 'modo_envio' (foi interpretado como uma variável categórica ordinal)
+summary(df$modo_envio)
+
+# Criando um Dicionário para Mapeamento (não foi seguido ordem alfabética)
+mapeamento = c('Navio' = 0, 'Aviao' = 1, 'Caminhao' = 2)
+
+# Aplicando a codificação de rótulos manualmente usando recode
+df$prioridade_produto <- recode(df$modo_envio, !!!mapeamento)
+table(df$modo_envio)
+
+
+
+## Método 2
+
+
+
+
+#### One-Hot Encoding
+
+
+
+
+
+
+############      Pré-Processamento de Variáveis Numéricas (Fature Scaling)     ############
+
+
+#### Fature Scaling
+
 
