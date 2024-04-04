@@ -157,6 +157,7 @@ mapeamento = c('Navio' = 0, 'Aviao' = 1, 'Caminhao' = 2)
 # Aplicando a codificação de rótulos manualmente usando recode
 df$modo_envio <- recode(df$modo_envio, !!!mapeamento)
 table(df$modo_envio)
+rm(mapeamento)
 
 
 
@@ -180,9 +181,56 @@ str(df)
 
 #### One-Hot Encoding
 
-# -> Variável categórica 'corredor_armazem' (foi interpretado como uma variável categórica nominal)
+# -> Variáveis categóricas 'corredor_armazem', 'performance_prioridade_envio', 'performance_modo_envio', 'faixa_desconto' e 'performance_faixa_desconto'
+
+summary(df$corredor_armazem)
+summary(df$performance_prioridade_envio)
+summary(df$performance_modo_envio)
+summary(df$faixa_desconto)
+summary(df$performance_faixa_desconto)
 
 
+# Aplicando One-Hot Encoding
+categories <- c('corredor_armazem', 
+                'performance_prioridade_envio', 
+                'performance_modo_envio', 
+                'faixa_desconto', 
+                'performance_faixa_desconto')
+
+for (cat in categories) {
+  onehots <- model.matrix(~0 + as.factor(df[[cat]]))
+  colnames(onehots) <- paste0(cat, "_", colnames(onehots))
+  df <- cbind(df, onehots)
+}
+
+str(df)
+
+
+# Removendo as colunas (não precisaremos mais das colunas originais após aplicar One-Hot Encoding)
+
+#df <- df %>% 
+#  select(-ID, -corredor_armazem, -performance_prioridade_envio, -performance_modo_envio, -faixa_desconto, -performance_faixa_desconto)
+
+
+
+
+#### Sobre Aplicar os Métodos de Label Encoding e One-Hot Encoding no R
+
+# - A resposta depende do algoritmo de machine learning que você está usando e da natureza dos seus dados. Em alguns casos, transformar uma variável
+#   categórica em numérica pode melhorar o desempenho do modelo, enquanto em outros casos pode não fazer diferença ou até mesmo piorar o desempenho.
+# - Alguns algoritmos de machine learning são capazes de lidar diretamente com variáveis categóricas codificadas como fatores no R, sem a necessidade de
+#   convertê-las em variáveis numéricas. Além disso, o R possui muitas implementações de algoritmos de machine learning que aceitam diretamente variáveis
+#   categóricas.
+# - No entanto, em alguns casos, algoritmos específicos podem se beneficiar de variáveis numéricas. Por exemplo, algoritmos baseados em árvores de decisão
+#   como Random Forests e Gradient Boosting Machines geralmente não precisam de codificação de variáveis categóricas, pois eles podem lidar diretamente com
+#   fatores. No entanto, algoritmos lineares como regressão logística podem se beneficiar da codificação de variáveis categóricas para obter melhores
+#   resultados.
+# - Portanto, é uma boa prática experimentar diferentes abordagens (com variáveis categóricas como fatores ou codificadas numericamente) e avaliar o
+#   desempenho do modelo usando validação cruzada ou outras técnicas de avaliação para determinar qual abordagem funciona melhor para o seu conjunto de
+#   dados e algoritmo de machine learning específico.
+
+
+#### Quando Aplicar os Métodos de Label Encoding e One-Hot Encoding no R
 
 
 
@@ -194,5 +242,9 @@ str(df)
 
 
 #### Fature Scaling
+
+
+
+
 
 
