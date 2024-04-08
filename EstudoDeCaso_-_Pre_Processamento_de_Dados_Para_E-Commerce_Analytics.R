@@ -13,6 +13,7 @@ library(tidyr)          # manipula dados (funcao pivot_longer)
 library(ggplot2)        # gera gráficos
 library(patchwork)      # unir gráficos
 library(corrplot)       # mapa de Correlação
+library(caret)          # pacote preProcess para normalização
 
 library(randomForest)
 
@@ -230,7 +231,17 @@ str(df)
 #   dados e algoritmo de machine learning específico.
 
 
-#### Quando Aplicar os Métodos de Label Encoding e One-Hot Encoding no R
+#### Quando Aplicar os Métodos de Label Encoding e One-Hot Encoding
+
+## Aplicamos Label Encoding quando:
+
+# • A variávelcategórica é ordinal (como por exemplo variável que indica escolaridade: ensino fundamental, ensino médio, etc...).
+#   Há uma ordem nas categorias da variável.
+
+## Aplicamos One-Hot Encoding quando:
+
+# • A variável categórica não é ordinal, ou seja, a variável é nominal (como por exemplo variável país).
+#   Nesse caso não há uma ordem nas categorias da variável.
 
 
 
@@ -242,6 +253,93 @@ str(df)
 
 
 #### Fature Scaling
+
+# - Muitos algoritmos de aprendizado de máquina funcionam melhor quando as variáveis de entrada são dimensionadas para um intervalo padrão.
+#   Esse processo de dimensionamento ou mudança de escala é chamado de Feature Scaling.
+# - Isso inclui algoritmos que usam uma soma ponderada da entrada, como regressão linear, e algoritmos que usam medidas de distância, como k-vizinhos
+#   mais próximos (KNN).
+
+# - As duas técnicas mais populares para dimensionar dados numéricos antes da modelagem são a normalização e a padronização.
+
+#  -> A normalização dimensiona cada variável de entrada separadamente para ointervalo 0-1, que é o intervalo para valores de ponto flutuante em que temos
+#     mais precisão. 
+
+#  -> A padronização dimensiona cada variável de entrada separadamente subtraindo a média (chamada de centralização) e dividindo pelo desvio padrão para
+#     deslocar a distribuição para ter uma média de zero e um desvio padrão de um.
+
+# O uso da Padronização é preferível quando a distribuição dos dados é normal ou aproximadamente normal, pois mantém a forma da distribuição original
+# dos dados, não os restringindo a um intervalo específico.
+
+
+names(df)
+
+
+## Normalização
+
+# Variável 'peso_gramas'
+summary(df$peso_gramas)
+head(df$peso_gramas)
+
+# Salvar média e desvio padrão da variável peso_gramas para caso queira reverter depois
+# media <- mean(df$peso_gramas)
+# desvio_padrao <- sd(df$peso_gramas)
+
+# Normalizar a variável peso_gramas (entre 0 e 1)
+df$peso_gramas <- (df$peso_gramas - min(df$peso_gramas)) / (max(df$peso_gramas) - min(df$peso_gramas))
+
+# Se você quiser reverter a normalização para obter os resultados originais
+# df$peso_gramas_original <- df$peso_gramas_norm * desvio_padrao + media
+
+summary(df$peso_gramas)
+head(df$peso_gramas)
+
+
+
+# Variável 'custo_produto' (entre (0 e 1))
+summary(df$custo_produto)
+head(df$custo_produto)
+
+# Normalizando
+df$custo_produto <- (df$custo_produto - min(df$custo_produto)) / (max(df$custo_produto) - min(df$custo_produto))
+
+summary(df$custo_produto)
+head(df$custo_produto)
+
+
+
+
+## Padronização
+
+# Variáveis 'desconto' , 'numero_chamadas_cliente', 'avaliacao_cliente', 'compras_anteriores'
+
+summary(df$desconto)
+head(df$desconto, 3)
+summary(df$numero_chamadas_cliente)
+head(df$numero_chamadas_cliente, 3)
+summary(df$avaliacao_cliente)
+head(df$avaliacao_cliente, 3)
+summary(df$compras_anteriores)
+head(df$compras_anteriores, 3)
+
+# Padronizando
+
+
+
+summary(df$desconto)
+head(df$desconto, 3)
+summary(df$numero_chamadas_cliente)
+head(df$numero_chamadas_cliente, 3)
+summary(df$avaliacao_cliente)
+head(df$avaliacao_cliente, 3)
+summary(df$compras_anteriores)
+head(df$compras_anteriores, 3)
+
+
+
+## Salvando o Dataset
+
+
+
 
 
 
