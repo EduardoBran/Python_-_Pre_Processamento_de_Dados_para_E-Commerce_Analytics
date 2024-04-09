@@ -205,6 +205,7 @@ for (cat in categories) {
 }
 
 str(df)
+rm(categories, cat, onehots)
 
 
 # Removendo as colunas (não precisaremos mais das colunas originais após aplicar One-Hot Encoding)
@@ -276,6 +277,7 @@ names(df)
 
 ## Normalização
 
+
 # Variável 'peso_gramas'
 summary(df$peso_gramas)
 head(df$peso_gramas)
@@ -292,7 +294,6 @@ df$peso_gramas <- (df$peso_gramas - min(df$peso_gramas)) / (max(df$peso_gramas) 
 
 summary(df$peso_gramas)
 head(df$peso_gramas)
-
 
 
 # Variável 'custo_produto' (entre (0 e 1))
@@ -314,23 +315,32 @@ head(df$custo_produto)
 
 summary(df$desconto)
 head(df$desconto, 3)
+
 summary(df$numero_chamadas_cliente)
 head(df$numero_chamadas_cliente, 3)
+
 summary(df$avaliacao_cliente)
 head(df$avaliacao_cliente, 3)
+
 summary(df$compras_anteriores)
 head(df$compras_anteriores, 3)
 
 # Padronizando
-
+df$desconto <- scale(df$desconto)
+df$numero_chamadas_cliente <- scale(df$numero_chamadas_cliente)
+df$avaliacao_cliente <- scale(df$avaliacao_cliente)
+df$compras_anteriores <- scale(df$compras_anteriores)
 
 
 summary(df$desconto)
 head(df$desconto, 3)
+
 summary(df$numero_chamadas_cliente)
 head(df$numero_chamadas_cliente, 3)
+
 summary(df$avaliacao_cliente)
 head(df$avaliacao_cliente, 3)
+
 summary(df$compras_anteriores)
 head(df$compras_anteriores, 3)
 
@@ -338,11 +348,6 @@ head(df$compras_anteriores, 3)
 
 ## Salvando o Dataset
 
-
-
-
-
-
-
+# write.csv(df_eng, "dados/df_final.csv", row.names = FALSE)
 
 
